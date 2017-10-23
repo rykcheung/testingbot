@@ -12,13 +12,13 @@ http.createServer( function(request, response) {
     body = Buffer.concat(body).toString();
 
     // for Facebook Messa
-    /*
     if (request.query['hub.verify_token'] === 'TOKEN') {
+      console.log("Validating webhook");
       response.statusCode(200).send(request.query['hub.challenge']);
     } else {
+      console.error("Failed validation.");
       response.statusCode(403).send('Error, wrong validation token');    
     }
-    */
 
     response.writeHead(200, {
       'Context-Type': 'text/html'
