@@ -1,6 +1,6 @@
 const http = require('http');
 
-http.createServer((req, res) => {
+http.createServer((request, response) => {
   const { headers, method, url } = request;
   let body = [];
   request.on('error', (err) => {
@@ -11,21 +11,17 @@ http.createServer((req, res) => {
     body = Buffer.concat(body).toString();
 
     // for Facebook Messa
-    if (req.query['hub.verify_token'] === 'TOKEN') {
-      res.statusCode(200).send(req.query['hub.challenge']);
+    /*
+    if (request.query['hub.verify_token'] === 'TOKEN') {
+      response.statusCode(200).send(request.query['hub.challenge']);
     } else {
-      res.statusCode(403).send('Error, wrong validation token');    
+      response.statusCode(403).send('Error, wrong validation token');    
     }
+    */
 
+    response.writeHead(200, {
+    });
+    response.end('<html><body><h1>Hello, world</h1></body></html>');
   });
 }).listen(80);
 
-/*
-server.get('/webhook', function (req, res) {
-    if (req.query['hub.verify_token'] === 'TOKEN') {
-      res.send(req.query['hub.challenge']);
-    } else {
-      res.send('Error, wrong validation token');    
-    }
-  });
-*/
