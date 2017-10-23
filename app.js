@@ -20,6 +20,7 @@ http.createServer((request, response) => {
     */
 
     response.writeHead(200, {
+      'Context-Type': 'text/html'
     });
     response.end('<html><body><h1>Hello, world</h1></body></html>');
   });
