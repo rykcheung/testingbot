@@ -16,15 +16,5 @@ http.createServer( function(request, response) {
     });
     response.end('<html><body><h1>Hello, world</h1></body></html>');
   });
-}).listen(process.env.PORT || 80);
+}).listen(process.env.PORT || 80 || 443);
 
-http.get('/webhook', function(request, response) {
-    // for Facebook Messa
-    if (request.query['hub.verify_token'] === 'TOKEN') {
-      console.log("Validating webhook");
-      response.statusCode(200).send(request.query['hub.challenge']);
-    } else {
-      console.error("Failed validation.");
-      response.statusCode(403).send('Error, wrong validation token');    
-    }
-});
