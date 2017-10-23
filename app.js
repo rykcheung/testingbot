@@ -1,5 +1,8 @@
 const http = require('http');
 
+const hostname = 'hkstp-testing-bot.azurewebsites.net';
+const port = 80;
+
 const server = http.createServer((req, res) => {
     res.statusCode = 200;
     res.setHeader('content-type', 'text/plain');
