@@ -1,13 +1,14 @@
-const http = require('http');
+var http = require('http');
 
-http.createServer((request, response) => {
+http.createServer( function(request, response) {
   const { headers, method, url } = request;
   let body = [];
-  request.on('error', (err) => {
+  
+  request.on('error', function(err) {
     console.error(err);
-  }).on('data', (chunk) => {
+  }).on('data', function(chunk) {
     body.push(chunk);
-  }).on('end', () => {
+  }).on('end', function() {
     body = Buffer.concat(body).toString();
 
     // for Facebook Messa
@@ -24,5 +25,5 @@ http.createServer((request, response) => {
     });
     response.end('<html><body><h1>Hello, world</h1></body></html>');
   });
-}).listen(80);
+}).listen(process.env.PORT || 80);
 
