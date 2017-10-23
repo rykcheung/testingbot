@@ -4,10 +4,14 @@ const hostname = 'hkstp-testing-bot.azurewebsites.net';
 const port = 80;
 
 const server = http.createServer((req, res) => {
-    res.statusCode = 200;
-    res.setHeader('content-type', 'text/plain');
-    res.end('Hello world\n');
+  res.statusCode = 200;
+  res.setHeader('content-type', 'text/plain');
+  res.end('Hello world\n');
 });
+
+server.listen(port, hostname, () => {
+  
+})
 
 server.get('/webhook', function (req, res) {
     if (req.query['hub.verify_token'] === 'TOKEN') {
