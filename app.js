@@ -129,6 +129,11 @@ function processPageEvents(body) {
     if(entry.messaging) {
       entry.messaging.forEach(function(messaging_event) {
         //console.log('Page Message Event', page_id, messaging_event);
+        console.log(GRAPH_API_BASE);
+        console.log(messaging_event.sender_id);
+        console.log(messaging_event.sender.id);
+        console.log(request);
+        
         request({
           baseUrl: GRAPH_API_BASE,
           url: '/' + messaging_event.sender.id,
