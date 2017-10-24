@@ -137,27 +137,11 @@ function processPageEvents(body) {
             message: 'Got it!'
           }
         }, function(error, response, body) {
-          body = JSON.parse(body);
-          var messageData = {
-            recipient: {
-              id: body.id
-            },
-            message: {
-              text: 'Hi ${body.first_name}',
-              quick_replies: [{
-                content_type: 'text',
-                title: 'Yes',
-                payload: 'START_SURVEY'
-              }, {
-                content_type: 'text',
-                title: 'Not now',
-                payload: 'DELAY_SURVEY'
-              }]
-            }
-          }
-
-          callSendAPI(messageData);
+          console.log(error, body);
+          //callSendAPI(messageData);
         });
+
+        callSendAPI('Another reply');
       });
     }
 
@@ -190,13 +174,10 @@ function processPageEvents(body) {
  *
  */
 function callSendAPI(messageData) {
-	request({
-		baseUrl: GRAPH_API_BASE,
+	graphapi({
 		url: '/me/messages',
-		qs: { access_token: ACCESS_TOKEN },
 		method: 'POST',
 		json: messageData
-
 	}, function (error, response, body) {
 		if (!error && response.statusCode == 200) {
 			var recipientId = body.recipient_id;
