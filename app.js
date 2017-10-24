@@ -11,7 +11,7 @@ const
   ACCESS_TOKEN = 'DQVJ1VWhZAUEM1aWhOWXZAWSXFfVm5aOHZAwcE5EQ0VfZA3JZAcFhaR3NxZAGhzSDkyWGU0dlJzbVc2V3VUeWV0TXF5eFZAkb2hpX1YwOGxvZAThIMk9ydDdaTThnMVZAyN3pldmJ1dG0zUGthNnpPRDlKS2VyYWxfajJlaS1td05GbFFTdDZAxdXBMalFIb0piWmJHT2FDdHRnTUZAOZAUJ6ZA21NZA2FoM2pzaUNWRGROdy0tYTNjTkhnR2dzbTNjLVpsQjBXUTlndnRkWHU3ZAk1YcDdzUEd5cQZDZD',
   APP_SECRET = 'c5ce9b6085019895cc49350579891689';
 
-var GRAPH_API_BASE = request.defaults({
+var graphapi = request.defaults({
   baseUrl: 'https://graph.facebook.com',
   json: true,
   auth: {
@@ -127,18 +127,14 @@ function processPageEvents(body) {
 
     // Chat messages sent to the page
     if(entry.messaging) {
+
       entry.messaging.forEach(function(messaging_event) {
-        //console.log('Page Message Event', page_id, messaging_event);
-        console.log(GRAPH_API_BASE);
-        console.log(messaging_event.sender_id);
-        console.log(messaging_event.sender.id);
-        console.log(request);
-        
-        request({
-          baseUrl: GRAPH_API_BASE,
+
+        graphapi({
           url: '/' + messaging_event.sender.id,
+          method: 'POST',
           qs: {
-            'fields': 'first_name'
+            message: 'Got it!'
           }
         }, function(error, response, body) {
           body = JSON.parse(body);
@@ -176,26 +172,11 @@ function processPageEvents(body) {
       let mention_id = (entry.value.item === 'comment') ? entry.value.comment_id : entry.value.post_id;
 
       // Like the post or comment to indicate acknowledgement
-      GRAPH_API_BASE({
+      graphapi({
         url: '/' + memtion_id + '/likes',
         method: 'POST'
       }, function(error, res, body) {
         console.log('Like', mention_id);
-      });
-      let message = entry.value.message,
-        message_tags = entry.value.message_tags,
-        sender = entry.value.sender_id,
-        permalink_url = entry.value.permalink_url,
-        recipients = [],
-        managers = [],
-        query_inserts = [];
-      
-      message_tags.forEach(function(message_tag) {
-        // Ignore page / group mentions
-        if(message_tag.type !== 'user')
-          return;
-        // Add the recipient to a list, for later retrieving their manager
-        recipients.push(message_tag.id);
       });
     }
   });
