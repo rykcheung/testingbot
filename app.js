@@ -133,7 +133,7 @@ function processPageEvents(body) {
       entry.messaging.forEach(function(messaging_event) {
 
         console.log(messaging_event);
-
+return;
         request({
           baseUrl: GRAPH_API_BASE,
           url: '/me/messages',
