@@ -130,7 +130,7 @@ function processPageEvents(body) {
 
     // Chat messages sent to the page
     if(entry.messaging) {
-      entry.message.forEach(function(messaging_event) {
+      entry.messaging.forEach(function(messaging_event) {
         console.log('Page Message Event', page_id, messaging_event);
         request({
           baseUrl: GRAPH_API_BASE,
