@@ -167,6 +167,8 @@ function processPageEvents(body) {
       
           callSendAPI(messageData);
         });
+
+        console.log('Seems success ...');
       });
     }
 
