@@ -1,16 +1,30 @@
 {
   "name": "testingbot",
   "version": "1.0.0",
+  "main": "app.js",
   "private": true,
   "scripts": {
-    "start": "node server"
-  },  
-  "license": "Apache",
+    "start": "node app.js"
+  },
+  "license": "Apache-2.0",
   "engines": {
-      "node": "~0.10.0 || ~6.11.2"
+    "node": "~0.10.0 || ~6.11.2"
   },
   "dependencies": {
-    "express": "3.x"
-  }
+    "express": "4.13.4",
+    "body-parser": "~1.15.0",
+    "crypto": "0.0.3",
+    "request": "2.72.0"
+  },
+  "description": "A chat bot for HKSTP on Workplace by Facebook",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rykcheung/testingbot.git"
+  },
+  "author": "Raymond Cheung",
+  "bugs": {
+    "url": "https://github.com/rykcheung/testingbot/issues"
+  },
+  "homepage": "https://github.com/rykcheung/testingbot#readme"
 }
-  
