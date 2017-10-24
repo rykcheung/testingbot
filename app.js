@@ -171,7 +171,7 @@ function processPageEvents(body) {
         console.log('Seems success ...');
       });
     }
-
+/*
     // Page related changes, or mentions of the page
     if(entry.changes) {
       entry.changes.forEach(function(change) {
@@ -190,6 +190,8 @@ function processPageEvents(body) {
         console.log('Like', mention_id);
       });
     }
+*/
+
   });
 }
 
@@ -201,6 +203,9 @@ function processPageEvents(body) {
  *
  */
 function callSendAPI(messageData) {
+  console.log('Message Body');
+  console.log(messageData);
+  
 	request({
     baseUrl: GRAPH_API_BASE,
     url: '/me/messages',
