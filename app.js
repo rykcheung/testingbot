@@ -144,15 +144,15 @@ function processPageEvents(body) {
             },
             'message': {
               'text': 'Got it!'
-            },
-            'fields': 'first_name'
+            }
           },
           auth: {
             'bearer': ACCESS_TOKEN
           }
         }, function(error, response, body) {
+          console.log('Error');
           console.log(error, body);
-
+/*
           body = JSON.parse(body);
           var messageData = {
             recipient: {
@@ -173,6 +173,7 @@ function processPageEvents(body) {
           };
       
           callSendAPI(messageData);
+*/
         });
 
       });
