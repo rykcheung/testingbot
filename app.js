@@ -11,7 +11,7 @@ const
   ACCESS_TOKEN = 'DQVJ1VWhZAUEM1aWhOWXZAWSXFfVm5aOHZAwcE5EQ0VfZA3JZAcFhaR3NxZAGhzSDkyWGU0dlJzbVc2V3VUeWV0TXF5eFZAkb2hpX1YwOGxvZAThIMk9ydDdaTThnMVZAyN3pldmJ1dG0zUGthNnpPRDlKS2VyYWxfajJlaS1td05GbFFTdDZAxdXBMalFIb0piWmJHT2FDdHRnTUZAOZAUJ6ZA21NZA2FoM2pzaUNWRGROdy0tYTNjTkhnR2dzbTNjLVpsQjBXUTlndnRkWHU3ZAk1YcDdzUEd5cQZDZD',
   APP_SECRET = 'c5ce9b6085019895cc49350579891689';
 
-var graphapi = request.defaults({
+var GRAPH_API_BASE = request.defaults({
   baseUrl: 'https://graph.facebook.com',
   json: true,
   auth: {
@@ -47,6 +47,7 @@ app.set('views', __dirname + '/views');
 //app.set('view engine', 'ejs');
 
 
+// Greate the app server
 app.get('/', function(req, res) {
   const { headers, method, url } = req;
   let body = [];
@@ -91,52 +92,138 @@ app.get('/webhook', function(req, res) {
 // Creates the endpoint for our webhook 
 app.post('/webhook', function(req, res) {  
 
-  let body = req.body;
+  try {
+    let body = req.body;
 
-  // Checks this is an event from a page subscription
-  if (body.object === 'page') {
-
-    // Iterates over each entry - there may be multiple if batched
-    body.entry.forEach(function(entry) {
-
-      if(entry.field === 'mention') {
-        let mention_id = (entry.value.item === 'comment') ? entry.value.comment_id : entry.value.post_id;
-
-        // Like the post or comment to indicate acknowledgement
-        graphapi({
-          url: '/' + memtion_id + '/likes',
-          method: 'POST'
-        }, function(error, res, body) {
-          console.log('Like', mention_id);
-        });
-        let message = entry.value.message,
-          message_tags = entry.value.message_tags,
-          sender = entry.value.sender_id,
-          permalink_url = entry.value.permalink_url,
-          recipients = [],
-          managers = [],
-          query_inserts = [];
-        
-        message_tags.forEach(function(message_tag) {
-          // Ignore page / group mentions
-          if(message_tag.type !== 'user')
-            return;
-          // Add the recipient to a list, for later retrieving their manager
-          recipients.push(message_tag.id);
-        })
-      }
-
-      // Gets the message. entry.messaging is an array, but 
-      // will only ever contain one message, so we get index 0
-      //let webhookEvent = entry.messaging[0];
-      //console.log(webhookEvent);
-    });
-
+    switch(body.object) {
+      case 'page':
+        processPageEvents(body);
+        break;
+      case 'group':
+        break;
+      case 'user':
+        break;
+      case 'workplace_security':
+        break;
+      default:
+        console.log('Unhandled webhook object', body.object);
+    }
+  } catch (e) {
+    console.error(e);
+  } finally {
     // Returns a '200 OK' response to all requests
     res.status(200).send('EVENT_RECEIVED');
-  } else {
-    // Returns a '404 Not Found' if event is not from a page subscription
-    res.status(404).send('Something wrong');
   }
 });
+
+
+
+function processPageEvents(body) {
+  
+  // Iterates over each entry - there may be multiple if batched
+  body.entry.forEach(function(entry) {
+    
+    let page_id = entry.id;
+
+    // Chat messages sent to the page
+    if(entry.messaging) {
+      entry.message.forEach(function(messaging_event) {
+        console.log('Page Message Event', page_id, messaging_event);
+        request({
+          baseUrl: GRAPH_API_BASE,
+          url: '/' + body.sender_id,
+          qs: {
+            'fields': 'first_name'
+          }
+        }, function(error, response, body) {
+          body = JSON.parse(body);
+          var messageData = {
+            recipient: {
+              id = body.id
+            },
+            message: {
+              text: 'Hi ${body.first_name}',
+              quick_replies: [{
+                content_type: 'text',
+                title: 'Yes',
+                payload: 'START_SURVEY'
+              }, {
+                content_type: 'text',
+                title: 'Not now',
+                payload: 'DELAY_SURVEY'
+              }]
+            }
+          }
+
+          callSendAPI(messageData);
+        });
+      });
+    }
+
+    // Page related changes, or mentions of the page
+    if(entry.changes) {
+      entry.changes.forEach(function(change) {
+        console.log('Page Change', page_id, change);
+      });
+    }
+
+    if(entry.field === 'mention') {
+      let mention_id = (entry.value.item === 'comment') ? entry.value.comment_id : entry.value.post_id;
+
+      // Like the post or comment to indicate acknowledgement
+      GRAPH_API_BASE({
+        url: '/' + memtion_id + '/likes',
+        method: 'POST'
+      }, function(error, res, body) {
+        console.log('Like', mention_id);
+      });
+      let message = entry.value.message,
+        message_tags = entry.value.message_tags,
+        sender = entry.value.sender_id,
+        permalink_url = entry.value.permalink_url,
+        recipients = [],
+        managers = [],
+        query_inserts = [];
+      
+      message_tags.forEach(function(message_tag) {
+        // Ignore page / group mentions
+        if(message_tag.type !== 'user')
+          return;
+        // Add the recipient to a list, for later retrieving their manager
+        recipients.push(message_tag.id);
+      });
+    }
+  });
+}
+
+
+
+/*
+ * Call the Send API. The message data goes in the body. If successful, we'll 
+ * get the message id in a response 
+ *
+ */
+function callSendAPI(messageData) {
+	request({
+		baseUrl: GRAPH_API_BASE,
+		url: '/me/messages',
+		qs: { access_token: ACCESS_TOKEN },
+		method: 'POST',
+		json: messageData
+
+	}, function (error, response, body) {
+		if (!error && response.statusCode == 200) {
+			var recipientId = body.recipient_id;
+			var messageId = body.message_id;
+
+			if (messageId) {
+				console.log('Successfully sent message with id %s to recipient %s', messageId, recipientId);
+			} else {
+				console.log('Successfully called Send API for recipient %s', recipientId);
+			}
+		} else {
+			console.error('Failed calling Send API', response.statusCode, response.statusMessage, body.error);
+		}
+	});  
+}
 
