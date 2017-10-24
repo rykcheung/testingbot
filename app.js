@@ -19,6 +19,8 @@ var graphapi = request.defaults({
   }
 });
 
+GRAPH_API_BASE = 'https://graph.facebook.com';
+
 function verifyRequestSignature(req, res, buf) {
   var signature = req.headers['x-hub-signature'];
 
@@ -130,18 +132,41 @@ function processPageEvents(body) {
 
       entry.messaging.forEach(function(messaging_event) {
 
-        graphapi({
+        request({
+          baseUrl: GRAPH_API_BASE,
           url: '/' + messaging_event.sender.id,
           method: 'POST',
           qs: {
-            message: 'Got it!'
+            message: 'Got it!',
+            'fields': 'first_name'
+          },
+          auth: {
+            'bearer': ACCESS_TOKEN
           }
         }, function(error, response, body) {
           console.log(error, body);
-          //callSendAPI(messageData);
-        });
 
-        callSendAPI('Another reply');
+          body = JSON.parse(body);
+          var messageData = {
+            recipient: {
+              id: body.id
+            },
+            message: {
+              text: `Hi ${body.first_name}, your opinion matters to us. Do you have a few seconds to answer a quick survey?`,
+              quick_replies: [{
+                content_type: 'text',
+                title: 'Yes',
+                payload: 'START_SURVEY'
+              },{
+                content_type: 'text',
+                title: 'Not now',
+                payload: 'DELAY_SURVEY'
+              }]
+            }
+          };
+      
+          callSendAPI(messageData);
+        });
       });
     }
 
@@ -174,8 +199,12 @@ function processPageEvents(body) {
  *
  */
 function callSendAPI(messageData) {
-	graphapi({
-		url: '/me/messages',
+	request({
+    baseUrl: GRAPH_API_BASE,
+    url: '/me/messages',
+    qs: {
+      access_token: ACCESS_TOKEN
+    },
 		method: 'POST',
 		json: messageData
 	}, function (error, response, body) {
