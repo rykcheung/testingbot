@@ -133,7 +133,7 @@ function processPageEvents(body) {
       entry.messaging.forEach(function(messaging_event) {
 
         console.log(messaging_event);
-        
+
         request({
           baseUrl: GRAPH_API_BASE,
           url: '/me/messages',
@@ -142,7 +142,9 @@ function processPageEvents(body) {
             'recipient': {
               'ids': [messaging_event.sender.id]
             },
-            'message': 'Got it!',
+            'message': {
+              'text': 'Got it!'
+            },
             'fields': 'first_name'
           },
           auth: {
@@ -173,7 +175,6 @@ function processPageEvents(body) {
           callSendAPI(messageData);
         });
 
-        console.log('Seems success ...');
       });
     }
 /*
