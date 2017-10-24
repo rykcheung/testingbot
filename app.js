@@ -19,7 +19,7 @@ var graphapi = request.defaults({
   }
 });
 
-GRAPH_API_BASE = 'https://graph.facebook.com';
+var GRAPH_API_BASE = 'https://graph.facebook.com';
 
 function verifyRequestSignature(req, res, buf) {
   var signature = req.headers['x-hub-signature'];
