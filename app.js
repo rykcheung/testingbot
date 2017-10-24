@@ -139,7 +139,7 @@ function processPageEvents(body) {
           body = JSON.parse(body);
           var messageData = {
             recipient: {
-              id = body.id
+              id: body.id
             },
             message: {
               text: 'Hi ${body.first_name}',
