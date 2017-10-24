@@ -120,21 +120,18 @@ app.post('/webhook', function(req, res) {
 
 function processPageEvents(body) {
   
-  console.log(body);
-
   // Iterates over each entry - there may be multiple if batched
   body.entry.forEach(function(entry) {
     
     let page_id = entry.id;
-    console.log('Page: ' + page_id);
 
     // Chat messages sent to the page
     if(entry.messaging) {
       entry.messaging.forEach(function(messaging_event) {
-        console.log('Page Message Event', page_id, messaging_event);
+        //console.log('Page Message Event', page_id, messaging_event);
         request({
           baseUrl: GRAPH_API_BASE,
-          url: '/' + body.sender_id,
+          url: '/' + messaging_event.sender.id,
           qs: {
             'fields': 'first_name'
           }
