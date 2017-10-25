@@ -127,15 +127,13 @@ function processPageEvents(body) {
   body.entry.forEach(function(entry) {
     
     let page_id = entry.id;
-    
+
     // Chat messages sent to the page
     if(entry.messaging) {
 
       entry.messaging.forEach(function(messaging_event) {
 
         console.log(messaging_event);
-        if(messaging_event.sender.id === '360104481108145')
-          return;
 
         request({
           baseUrl: GRAPH_API_BASE,
@@ -143,7 +141,7 @@ function processPageEvents(body) {
           method: 'POST',
           qs: {
             'recipient': {
-              'ids': [messaging_event.sender.id]
+              'ids': ['360104481108145']
             },
             'message': {
               'text': 'Got it!'
