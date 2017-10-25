@@ -160,8 +160,6 @@ function processPageEvents(body) {
           var return_msg = 'Ok, I received your message: ' + messaging_event.message.text;
           if(nlp_entities.greetings) {
             return_msg = 'Hi there!';
-          } else {nlp_entities.intent} {
-            return_msg = nlp_entities.value;
           }
 
           request({
