@@ -54,7 +54,8 @@ request({
   url: '/me/nlp_configs',
   method: 'POST',
   qs: {
-    'nlp_enabled': true
+    'nlp_enabled': true,
+    'custom_token': 'Y3CNOCK2WWG6PJEKXYW7PY6PBWYQXWE4'
   },
   auth: {
     'bearer': ACCESS_TOKEN
@@ -158,6 +159,11 @@ function processPageEvents(body) {
           var nlp_entities = messaging_event.message.nlp.entities;
           console.log(nlp_entities);
 
+          var return_msg = 'Ok, I received your message: ' + messaging_event.message.text;
+          if(nlp_entities.greetings && nlp_entities.greetings.confidence > 0.9) {
+            return_msg = 'Hi there!';
+          }
+
           request({
             baseUrl: GRAPH_API_BASE,
             url: '/me/messages',
@@ -167,7 +173,7 @@ function processPageEvents(body) {
                 'ids': [messaging_event.sender.id]
               },
               'message': {
-                'text': 'Ok, I received your message: ' + messaging_event.message.text
+                'text': return_msg
               }
             },
             auth: {
