@@ -149,7 +149,7 @@ function processPageEvents(body) {
                 'ids': [messaging_event.sender.id]
               },
               'message': {
-                'text': messaging_event.message.text
+                'text': 'Ok, I received your message: ' + messaging_event.message.text
               }
             },
             auth: {
