@@ -59,6 +59,10 @@ request({
   auth: {
     'bearer': ACCESS_TOKEN
   }
+}, function(error, response, body) {
+  if(error) {
+    console.log(error, body);
+  }
 });
 
 
@@ -171,6 +175,8 @@ function processPageEvents(body) {
           }, function(error, response, body) {
             if(error) {
               console.log(error, body);
+            } else {
+              console.log(messaging_event);
             }
             //console.log(error, body);
           });
