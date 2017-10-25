@@ -135,7 +135,7 @@ function processPageEvents(body) {
 
       entry.messaging.forEach(function(messaging_event) {
 
-        console.log(messaging_event);
+        //console.log(messaging_event);
 
         var txt = 'Got it!';
 
@@ -156,7 +156,10 @@ function processPageEvents(body) {
               'bearer': ACCESS_TOKEN
             }
           }, function(error, response, body) {
-            console.log(error, response, body);
+            if(error) {
+              console.log(error, body);
+            }
+            //console.log(error, body);
           });
         } else if(messaging_event.read) {
           console.log('Read message');
