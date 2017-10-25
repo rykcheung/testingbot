@@ -46,7 +46,20 @@ var app = express();
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json({ verify: verifyRequestSignature }));
 app.set('views', __dirname + '/views');
-//app.set('view engine', 'ejs');
+
+
+// Enabling built-in NLP
+request({
+  baseUrl: GRAPH_API_BASE,
+  url: '/me/nlp_configs',
+  method: 'POST',
+  qs: {
+    'nlp_enabled': true
+  },
+  auth: {
+    'bearer': ACCESS_TOKEN
+  }
+});
 
 
 // Greate the app server
