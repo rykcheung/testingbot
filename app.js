@@ -154,9 +154,10 @@ function processPageEvents(body) {
 
         //console.log(messaging_event);
 
-        var txt = 'Got it!';
-
         if(messaging_event.message) {
+          var nlp_entities = messaging_event.message.nlp.entities;
+          console.log(nlp_entities);
+
           request({
             baseUrl: GRAPH_API_BASE,
             url: '/me/messages',
