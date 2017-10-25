@@ -111,6 +111,7 @@ app.post('/webhook', function(req, res) {
         console.log('Unhandled webhook object', body.object);
     }
   } catch (e) {
+    console.log('Error captured in the POST');
     console.error(e);
   } finally {
     // Returns a '200 OK' response to all requests
@@ -126,7 +127,7 @@ function processPageEvents(body) {
   body.entry.forEach(function(entry) {
     
     let page_id = entry.id;
-
+consolog.log(entry);
     // Chat messages sent to the page
     if(entry.messaging) {
 
