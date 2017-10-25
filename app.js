@@ -65,7 +65,6 @@ request({
     console.log(error, body);
   }
 });
-console.log('Connected');
 
 
 // Greate the app server
@@ -162,7 +161,9 @@ function processPageEvents(body) {
           if(nlp_entities.greetings) {
             return_msg = 'Hi there!';
           } else if(nlp_entities.intent && nlp_entities.intent.value === 'order') {
+            console.log('ORDER');
             if(nlp_entities.search_query) {
+              console.log('QUERY');
               console.log(nlp_entities.search_query.value);
             }
           }
