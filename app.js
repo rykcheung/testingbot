@@ -156,17 +156,12 @@ function processPageEvents(body) {
               'bearer': ACCESS_TOKEN
             }
           }, function(error, response, body) {
-            if(error) {
-              console.log('Error');
-            }
-            console.log(response, body);
+            console.log(error, response, body);
           });
         } else if(messaging_event.read) {
           console.log('Read message');
-          return;
         } else {
           console.log('Unknown messaging');
-          return;
         }
       });
     }
