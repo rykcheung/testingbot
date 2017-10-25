@@ -156,6 +156,7 @@ function processPageEvents(body) {
           }
         }, function(error, response, body) {
           console.log('Error');
+          console.log(response);
           console.log(error, body);
 /*
           body = JSON.parse(body);
