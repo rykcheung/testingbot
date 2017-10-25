@@ -161,10 +161,13 @@ function processPageEvents(body) {
           if(nlp_entities.greetings) {
             return_msg = 'Hi there!';
           } else if(nlp_entities.intent) {
-            console.log(nlp_entities.intent.value);
+            nlp_entities.intent.forEach(function(intent) {
+              console.log(intent.value);
+            })
             if(nlp_entities.search_query) {
-              console.log('QUERY');
-              console.log(nlp_entities.search_query.value);
+              nlp_entities.search_query.forEach(function(query) {
+                console.log(query.value);
+              })
             }
           }
 
