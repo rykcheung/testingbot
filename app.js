@@ -135,6 +135,11 @@ function processPageEvents(body) {
 
         console.log(messaging_event);
 
+        var txt = 'Got it!';
+
+        if(messaging_event.message.text)
+          txt = messaging_event.message.text;
+
         request({
           baseUrl: GRAPH_API_BASE,
           url: '/me/messages',
@@ -144,7 +149,7 @@ function processPageEvents(body) {
               'ids': [messaging_event.sender.id]
             },
             'message': {
-              'text': 'Got it!'
+              'text': messaging_event.message.text
             }
           },
           auth: {
