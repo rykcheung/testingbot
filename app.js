@@ -136,7 +136,8 @@ function processPageEvents(body) {
         console.log(cnt);
         console.log(messaging_event);
         cnt += 1;
-        return;
+        if(cnt > 2)
+          return;
 
         request({
           baseUrl: GRAPH_API_BASE,
