@@ -65,6 +65,7 @@ request({
     console.log(error, body);
   }
 });
+console.log('Connected');
 
 
 // Greate the app server
