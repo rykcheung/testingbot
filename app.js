@@ -127,9 +127,9 @@ function processPageEvents(body) {
   body.entry.forEach(function(entry) {
     
     let page_id = entry.id;
-    console.log(entry);
-    return;
-    
+    //console.log(entry);
+    //return;
+
     // Chat messages sent to the page
     if(entry.messaging) {
 
@@ -139,8 +139,15 @@ function processPageEvents(body) {
 
         var txt = 'Got it!';
 
-        if(messaging_event.message.text)
+        if(messaging_event.message) {
           txt = messaging_event.message.text;
+        } else if(messaging_event.read) {
+          console.log('Read message');
+          return;
+        } else {
+          console.log('Unknown messaging');
+          return;
+        }
 
         request({
           baseUrl: GRAPH_API_BASE,
