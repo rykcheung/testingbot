@@ -140,7 +140,27 @@ function processPageEvents(body) {
         var txt = 'Got it!';
 
         if(messaging_event.message) {
-          txt = messaging_event.message.text;
+          request({
+            baseUrl: GRAPH_API_BASE,
+            url: '/me/messages',
+            method: 'POST',
+            qs: {
+              'recipient': {
+                'ids': [messaging_event.sender.id]
+              },
+              'message': {
+                'text': messaging_event.message.text
+              }
+            },
+            auth: {
+              'bearer': ACCESS_TOKEN
+            }
+          }, function(error, response, body) {
+            if(error) {
+              console.log('Error');
+            }
+            console.log(response, body);
+          });
         } else if(messaging_event.read) {
           console.log('Read message');
           return;
@@ -148,72 +168,8 @@ function processPageEvents(body) {
           console.log('Unknown messaging');
           return;
         }
-
-        request({
-          baseUrl: GRAPH_API_BASE,
-          url: '/me/messages',
-          method: 'POST',
-          qs: {
-            'recipient': {
-              'ids': [messaging_event.sender.id]
-            },
-            'message': {
-              'text': messaging_event.message.text
-            }
-          },
-          auth: {
-            'bearer': ACCESS_TOKEN
-          }
-        }, function(error, response, body) {
-          console.log('Error');
-          console.log(error, body);
-/*
-          body = JSON.parse(body);
-          var messageData = {
-            recipient: {
-              id: body.id
-            },
-            message: {
-              text: `Hi ${body.first_name}, your opinion matters to us. Do you have a few seconds to answer a quick survey?`,
-              quick_replies: [{
-                content_type: 'text',
-                title: 'Yes',
-                payload: 'START_SURVEY'
-              },{
-                content_type: 'text',
-                title: 'Not now',
-                payload: 'DELAY_SURVEY'
-              }]
-            }
-          };
-      
-          callSendAPI(messageData);
-*/
-        });
-
       });
     }
-/*
-    // Page related changes, or mentions of the page
-    if(entry.changes) {
-      entry.changes.forEach(function(change) {
-        console.log('Page Change', page_id, change);
-      });
-    }
-
-    if(entry.field === 'mention') {
-      let mention_id = (entry.value.item === 'comment') ? entry.value.comment_id : entry.value.post_id;
-
-      // Like the post or comment to indicate acknowledgement
-      graphapi({
-        url: '/' + memtion_id + '/likes',
-        method: 'POST'
-      }, function(error, res, body) {
-        console.log('Like', mention_id);
-      });
-    }
-*/
-
   });
 }
 
