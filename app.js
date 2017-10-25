@@ -130,22 +130,21 @@ function processPageEvents(body) {
     // Chat messages sent to the page
     if(entry.messaging) {
 
+      var cnt = 0;
       entry.messaging.forEach(function(messaging_event) {
 
+        console.log(cnt);
         console.log(messaging_event);
+        cnt += 1;
+        return;
 
-        if(messaging_event.sender.id === messaging_event.recipient.id) {
-          console.log('Same');
-          return;
-        }
-//return;
         request({
           baseUrl: GRAPH_API_BASE,
           url: '/me/messages',
           method: 'POST',
           qs: {
             'recipient': {
-              'ids': [messaging_event.recipient.id]
+              'ids': [messaging_event.sender.id]
             },
             'message': {
               'text': 'Got it!'
