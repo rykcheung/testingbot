@@ -127,14 +127,14 @@ function processPageEvents(body) {
   body.entry.forEach(function(entry) {
     
     let page_id = entry.id;
-console.log(entry);
+    
     // Chat messages sent to the page
     if(entry.messaging) {
 
       entry.messaging.forEach(function(messaging_event) {
 
         console.log(messaging_event);
-        if(messaging_event.message.text == 'Got it!')
+        if(messaging_event.sender.id === '360104481108145')
           return;
 
         request({
