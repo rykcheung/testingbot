@@ -127,7 +127,7 @@ function processPageEvents(body) {
   body.entry.forEach(function(entry) {
     
     let page_id = entry.id;
-
+    console.log(entry.changes);
     // Chat messages sent to the page
     if(entry.messaging) {
 
@@ -141,7 +141,7 @@ function processPageEvents(body) {
           method: 'POST',
           qs: {
             'recipient': {
-              'ids': ['360104481108145']
+              'ids': [messaging_event.sender.id]
             },
             'message': {
               'text': 'Got it!'
