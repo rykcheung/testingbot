@@ -145,7 +145,7 @@ function processPageEvents(body) {
           method: 'POST',
           qs: {
             'recipient': {
-              'ids': [messaging_event.sender.id]
+              'ids': [messaging_event.recipient.id]
             },
             'message': {
               'text': 'Got it!'
