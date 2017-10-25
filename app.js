@@ -127,7 +127,7 @@ function processPageEvents(body) {
   body.entry.forEach(function(entry) {
     
     let page_id = entry.id;
-consolog.log(entry);
+console.log(entry);
     // Chat messages sent to the page
     if(entry.messaging) {
 
