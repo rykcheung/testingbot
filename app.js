@@ -145,22 +145,20 @@ function processPageEvents(body) {
   body.entry.forEach(function(entry) {
     
     let page_id = entry.id;
-    //console.log(entry);
-    //return;
 
     // Chat messages sent to the page
     if(entry.messaging) {
 
       entry.messaging.forEach(function(messaging_event) {
 
-        //console.log(messaging_event);
+        console.log(messaging_event);
 
         if(messaging_event.message) {
           var nlp_entities = messaging_event.message.nlp.entities;
           console.log(nlp_entities);
 
           var return_msg = 'Ok, I received your message: ' + messaging_event.message.text;
-          if(nlp_entities.greetings && nlp_entities.greetings.confidence > 0.9) {
+          if(nlp_entities.greetings) {
             return_msg = 'Hi there!';
           }
 
