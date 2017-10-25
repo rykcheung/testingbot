@@ -162,13 +162,18 @@ function processPageEvents(body) {
             return_msg = 'Hi there!';
           } else if(nlp_entities.intent) {
             nlp_entities.intent.forEach(function(intent) {
-              console.log(intent.value);
+              if(intent.value === 'order') {
+                return_msg = 'Do you want to order';
+                if(nlp_entities.search_query) {
+                  nlp_entities.search_query.forEach(function(query) {
+                    return_msg += ' ' + query.value
+                  })
+                  return_msg += '?';
+                } else {
+                  return_msg += ' something?';
+                }
+              }
             })
-            if(nlp_entities.search_query) {
-              nlp_entities.search_query.forEach(function(query) {
-                console.log(query.value);
-              })
-            }
           }
 
           request({
