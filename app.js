@@ -130,13 +130,10 @@ function processPageEvents(body) {
     // Chat messages sent to the page
     if(entry.messaging) {
 
-      var cnt = 0;
       entry.messaging.forEach(function(messaging_event) {
 
-        console.log(cnt);
         console.log(messaging_event);
-        cnt += 1;
-        if(cnt > 2)
+        if(messaging_event.message.text == 'Got it!')
           return;
 
         request({
@@ -156,7 +153,6 @@ function processPageEvents(body) {
           }
         }, function(error, response, body) {
           console.log('Error');
-          console.log(response);
           console.log(error, body);
 /*
           body = JSON.parse(body);
