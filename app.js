@@ -161,6 +161,10 @@ function processPageEvents(body) {
           var return_msg = 'Ok, I received your message: ' + messaging_event.message.text;
           if(nlp_entities.greetings) {
             return_msg = 'Hi there!';
+          } else if(nlp_entities.intent && nlp_entities.intent.value === 'order') {
+            if(nlp_entities.search_query) {
+              console.log(nlp_entities.search_query.value);
+            }
           }
 
           request({
