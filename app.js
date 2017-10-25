@@ -151,7 +151,7 @@ function processPageEvents(body) {
 
       entry.messaging.forEach(function(messaging_event) {
 
-        console.log(messaging_event);
+        //console.log(messaging_event);
 
         if(messaging_event.message) {
           var nlp_entities = messaging_event.message.nlp.entities;
@@ -160,8 +160,8 @@ function processPageEvents(body) {
           var return_msg = 'Ok, I received your message: ' + messaging_event.message.text;
           if(nlp_entities.greetings) {
             return_msg = 'Hi there!';
-          } else if(nlp_entities.intent && nlp_entities.intent.value === 'order') {
-            console.log('ORDER');
+          } else if(nlp_entities.intent) {
+            console.log(nlp_entities.intent.value);
             if(nlp_entities.search_query) {
               console.log('QUERY');
               console.log(nlp_entities.search_query.value);
@@ -187,7 +187,7 @@ function processPageEvents(body) {
             if(error) {
               console.log(error, body);
             } else {
-              console.log(messaging_event);
+              //console.log(messaging_event);
             }
             //console.log(error, body);
           });
