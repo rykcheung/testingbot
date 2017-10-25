@@ -133,7 +133,12 @@ function processPageEvents(body) {
       entry.messaging.forEach(function(messaging_event) {
 
         console.log(messaging_event);
-return;
+
+        if(messaging_event.sender.id === messaging_event.recipient.id) {
+          console.log('Same');
+          return;
+        }
+//return;
         request({
           baseUrl: GRAPH_API_BASE,
           url: '/me/messages',
