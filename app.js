@@ -172,15 +172,28 @@ function processPageEvents(body) {
                     return_msg = 'Do you want to order';
                     if(nlp_entities.search_query) {
                       nlp_entities.search_query.forEach(function(query) {
-                        return_msg += ' ' + query.value
-                      })
+                        return_msg += ' ' + query.value;
+                      });
                       return_msg += '?';
                     } else {
                       return_msg += ' something?';
                     }
                     break;
                   case 'apply_leave':
-                    return_msg = 'Do you want to apply for a leave?';
+                    return_msg = 'Do you want to apply for a';
+                    if(nlp_entities.search_query) {
+                      nlp_entities.search_query.forEach(function(query) {
+                        return_msg += ' ' + query.value;
+                      });
+                    } else {
+                      return_msg += ' leave';
+                    }
+                    if(nlp_entities.datetime) {
+                      nlp_entities.datetime.forEach(function(dt){
+                        return_msg += ' on ' + dt.value;
+                      });
+                    }
+                    return_msg += '?';
                     break;
                   default:
                 }
