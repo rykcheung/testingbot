@@ -157,27 +157,29 @@ function processPageEvents(body) {
           var nlp_entities = messaging_event.message.nlp.entities;
           console.log(nlp_entities);
 
-          var return_msg = 'Ok, I received your message: ' + messaging_event.message.text;
+          var return_msg = 'Ok, I received your message: ' + messaging_event.message.text + ' but not understand, sorry!';
           if(nlp_entities.greetings) {
             return_msg = 'Hi there!';
           } else if(nlp_entities.intent) {
             nlp_entities.intent.forEach(function(intent) {
-              switch(intent.value) {
-                case 'order':
-                  return_msg = 'Do you want to order';
-                  if(nlp_entities.search_query) {
-                    nlp_entities.search_query.forEach(function(query) {
-                      return_msg += ' ' + query.value
-                    })
-                    return_msg += '?';
-                  } else {
-                    return_msg += ' something?';
-                  }
-                  break;
-                case 'apply_leave':
-                  return_msg = 'Do you want to apply for a leave?';
-                  break;
-                default:
+              if(intent.confidence > 0.95) {
+                switch(intent.value) {
+                  case 'order':
+                    return_msg = 'Do you want to order';
+                    if(nlp_entities.search_query) {
+                      nlp_entities.search_query.forEach(function(query) {
+                        return_msg += ' ' + query.value
+                      })
+                      return_msg += '?';
+                    } else {
+                      return_msg += ' something?';
+                    }
+                    break;
+                  case 'apply_leave':
+                    return_msg = 'Do you want to apply for a leave?';
+                    break;
+                  default:
+                }
               }
             })
           }
