@@ -157,11 +157,15 @@ function processPageEvents(body) {
           var nlp_entities = messaging_event.message.nlp.entities;
           console.log(nlp_entities);
 
+          // Set the default message
           var return_msg = 'Ok, I received your message: ' + messaging_event.message.text + ' but not understand, sorry!';
+
           if(nlp_entities.greetings) {
             return_msg = 'Hi there!';
           } else if(nlp_entities.intent) {
             nlp_entities.intent.forEach(function(intent) {
+
+              // if the confidence level of the intent is low then return the default message
               if(intent.confidence > 0.95) {
                 switch(intent.value) {
                   case 'order':
@@ -181,7 +185,7 @@ function processPageEvents(body) {
                   default:
                 }
               }
-            })
+            });
           }
 
           request({
