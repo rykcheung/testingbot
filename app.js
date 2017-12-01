@@ -10,6 +10,7 @@ const
   VERIFY_TOKEN = 'TOKEN',
   ACCESS_TOKEN = 'DQVJ1VWhZAUEM1aWhOWXZAWSXFfVm5aOHZAwcE5EQ0VfZA3JZAcFhaR3NxZAGhzSDkyWGU0dlJzbVc2V3VUeWV0TXF5eFZAkb2hpX1YwOGxvZAThIMk9ydDdaTThnMVZAyN3pldmJ1dG0zUGthNnpPRDlKS2VyYWxfajJlaS1td05GbFFTdDZAxdXBMalFIb0piWmJHT2FDdHRnTUZAOZAUJ6ZA21NZA2FoM2pzaUNWRGROdy0tYTNjTkhnR2dzbTNjLVpsQjBXUTlndnRkWHU3ZAk1YcDdzUEd5cQZDZD',
   APP_SECRET = 'c5ce9b6085019895cc49350579891689';
+  WIT_AI_TOKEN = 'Y3CNOCK2WWG6PJEKXYW7PY6PBWYQXWE4';
 
 var graphapi = request.defaults({
   baseUrl: 'https://graph.facebook.com',
@@ -55,7 +56,7 @@ request({
   method: 'POST',
   qs: {
     'nlp_enabled': true,
-    'custom_token': 'Y3CNOCK2WWG6PJEKXYW7PY6PBWYQXWE4'
+    'custom_token': WIT_AI_TOKEN
   },
   auth: {
     'bearer': ACCESS_TOKEN
@@ -67,7 +68,7 @@ request({
 });
 
 
-// Greate the app server
+// Greate the app server to test the avalibility
 app.get('/', function(req, res) {
   const { headers, method, url } = req;
   let body = [];
